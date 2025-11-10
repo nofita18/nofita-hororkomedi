@@ -76,7 +76,7 @@
                                             <td>{{ $p->phone }}</td>
                                             <td>{{ $p->birthday }}</td>
                                             <td>
-                                                <a href="{{ route('pelanggan.edit', $p->id) }}"
+                                                <a href="{{ route('pelanggan.edit', $item->id) }}"
                                                     class="btn btn-sm btn-warning">Edit</a>
 
                                                 <form action="{{ route('pelanggan.destroy', $p->id) }}" method="POST"
