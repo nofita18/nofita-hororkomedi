@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -10,10 +9,29 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data['dataUser'] = User::all();
-		return view('admin.user.index',$data);
+        // Ambil keyword search dari input user
+        $search = $request->input('search');
+
+        // Mulai query User
+        $query = User::query();
+
+        // Jika ada keyword search, filter berdasarkan name atau email
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        // Pagination, 10 data per halaman
+        $dataUser = $query->orderBy('id', 'desc')->paginate(10);
+
+        // Simpan query string search supaya pagination tetap membawa keyword
+        $dataUser->appends($request->only('search'));
+
+        return view('admin.user.index', compact('dataUser', 'search'));
     }
 
     /**
@@ -29,10 +47,10 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $data['name'] = $request->name;
-        $data['password']     = $request->password;
-        $data['email']      = $request->email;
-        $data['password_confirmation']      = $request->password_confirmation;
+        $data['name']                  = $request->name;
+        $data['password']              = $request->password;
+        $data['email']                 = $request->email;
+        $data['password_confirmation'] = $request->password_confirmation;
 
         User::create($data);
 

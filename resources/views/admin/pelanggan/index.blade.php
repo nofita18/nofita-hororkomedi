@@ -24,8 +24,9 @@
                 <p class="mb-0">Form untuk menambah pelanggan baru</p>
             </div>
             <div>
-                <a href="pelanggan.create" class="btn btn-success text-white"><i class="far fa-question-circle me-1"></i>
-                    Tambah Pelanggan</a>
+                <a href="{{ route('pelanggan.create') }}" class="btn btn-success text-white">
+                    Tambah Pelanggan
+                </a>
             </div>
         </div>
     </div>
@@ -66,33 +67,36 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($dataPelanggan as $index => $p)
+                                    @foreach ($dataPelanggan as $index => $item)
                                         <tr>
-                                            <td>{{ $index + 1 }}</td>
-                                            <td>{{ $p->first_name }}</td>
-                                            <td>{{ $p->last_name }}</td>
-                                            <td>{{ $p->gender }}</td>
-                                            <td>{{ $p->email }}</td>
-                                            <td>{{ $p->phone }}</td>
-                                            <td>{{ $p->birthday }}</td>
+                                            <td>{{ $index + 1 }}</td> <!-- Kolom No -->
+                                            <td>{{ $item->first_name }}</td>
+                                            <td>{{ $item->last_name }}</td>
+                                            <td>{{ $item->gender }}</td>
+                                            <td>{{ $item->email }}</td>
+                                            <td>{{ $item->phone }}</td>
+                                            <td>{{ $item->birthday }}</td>
                                             <td>
-                                                <a href="{{ route('pelanggan.edit', $item->id) }}"
-                                                    class="btn btn-sm btn-warning">Edit</a>
+                                                <a href="{{ route('pelanggan.edit', $item->pelanggan_id) }}"
+                                                    class="btn btn-primary">
+                                                    Edit
+                                                </a>
 
-                                                <form action="{{ route('pelanggan.destroy', $p->id) }}" method="POST"
-                                                    class="d-inline"
-                                                    onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                                <form action="{{ route('pelanggan.destroy', $item->pelanggan_id) }}"
+                                                    method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger">
-                                                        Hapus
-                                                    </button>
+                                                    <button type="submit" class="btn btn-danger">Hapus</button>
                                                 </form>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
+
                             </table>
+                            <div class="mt-3">
+                                {{ $dataPelanggan->links('pagination::bootstrap-5') }}
+                            </div>
                         </div>
                     @endif
                 </div>
